@@ -1,6 +1,8 @@
 
 ##hla_poll_v1.8.cloud_sub.sh
-#background running HLA-scan and HLA-HD to save computation time
+# Xinming Zhuo PhD; xmzhuo@gmail.com
+#this the sub script used by the master script in a docker
+#background running HLA-scan, hlavbseq, hlaminer and HLA-HD to save computation time
 ################ body of code ###############
 ### Kourami, HLD-scan, HLA-VBSeq, HLA-HD, HLAminer ####
     export PATH=$PATH:/bin:/bwa.kit:/tools/:/samtools/bin:/samtools/bin:/tools/hlahd.1.2.0.1/bin
@@ -90,18 +92,12 @@
         mkdir -p $folder/HLA/hlavbseq
         cd $folder/HLA/hlavbseq
         bwa index $HLAVBSEQ/hla_all_v2.fasta
-        #bwa mem -t 8 -P -L 10000 -a $HLAVBSEQ/hla_all_v2.fasta $folder/HLA/hla_hd/$sample.hla.1.fastq $folder/HLA/hla_hd/$sample.hla.2.fastq > $folder/HLA/hlavbseq/$sample.hla.sam
         cp $folder/HLA/kourami/${sample}_extract*.fq.gz .
         gunzip ${sample}_extract*.fq.gz
         bwa mem -t 8 -P -L 10000 -a $HLAVBSEQ/hla_all_v2.fasta ${sample}_extract_1.fq ${sample}_extract_2.fq > $folder/HLA/hlavbseq/$sample.hla.sam
         #For paired-end read data:
         java -jar $HLAVBSEQ/HLAVBSeq.jar $HLAVBSEQ/hla_all_v2.fasta $folder/HLA/hlavbseq/$sample.hla.sam $folder/HLA/hlavbseq/$sample.result.txt --alpha_zero 0.01 --is_paired
-        #./parse_result.pl Allelelist_v2.txt NA12878_result.txt | grep "^A\*" | sort -k2 -n -r > HLA_A.txt
-        #chmod +x $HLAVBSEQ/parse_result.pl
         $HLAVBSEQ/parse_result.pl $HLAVBSEQ/Allelelist_v2.txt $folder/HLA/hlavbseq/$sample.result.txt | sort -k2 -n -r > $sample.HLA.txt
-        #chmod +x $HLAVBSEQ/call_hla_digits.py
-        #apt-get install python-pandas
-        #$HLAVBSEQ/call_hla_digits.py -v $folder/HLA/hlavbseq/$sample.result.txt -a $HLAVBSEQ/Allelelist_v2.txt -r 300 -d 4 --ispaired > $folder/HLA/hlavbseq/$sample.report.d4.txt
         $HLAVBSEQ/call_hla_digits.py -v $folder/HLA/hlavbseq/$sample.result.txt -a $HLAVBSEQ/Allelelist_v2.txt -r 300 -d 8 --ispaired > $folder/HLA/hlavbseq/$sample.report.d8.txt
         #    -v xxxxx_result.txt : Need to set the output file from the HLA-VBSeq
         #    -a Allelelist.txt : IMGT HLA Allelelist
