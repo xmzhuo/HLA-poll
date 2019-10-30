@@ -3,6 +3,7 @@
 #### hla_poll_v1.8.main.run.sh
 #Xinming Zhuo PhD; xmzhuo@gmail.com
 ###############################
+#this is the master script
 #bash hla_poll_v1.8.main.run.sh /data/in/ /data/out/ *.sub.sh
 ######## body of code ########
 
