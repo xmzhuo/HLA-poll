@@ -1,8 +1,9 @@
 
 
 #### hla_poll_v1.8.main.run.sh
+#Xinming Zhuo PhD; xmzhuo@gmail.com
 ###############################
-bash hla_poll_v1.8.main.run.sh /data/in/ /data/out/ *.sub.sh
+#bash hla_poll_v1.8.main.run.sh /data/in/ /data/out/ *.sub.sh
 ######## body of code ########
 
   folder="$1"
