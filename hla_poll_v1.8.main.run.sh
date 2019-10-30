@@ -1,7 +1,8 @@
 
 
-#### hla_poll_v1.8.seq_bg.run.sh
+#### hla_poll_v1.8.main.run.sh
 ###############################
+bash hla_poll_v1.8.main.run.sh /data/in/ /data/out/ *.sub.sh
 ######## body of code ########
 
   folder="$1"
@@ -9,13 +10,9 @@
   sub_script="$3"
   sample=$4
   cd $folder
-  #sample=$(ls *.bam)
-  #tar -xvf HLAminer_1-4.tar.gz
-
-  #for sample in $(ls *.bam); do
-
+  
     sample=$(echo $sample | sed 's/\.bam//')
-    #sample=$1
+    
     echo $sample
     #index the bam file if bai not existed
     if [ ! -f $sample.bam.bai ] && [ ! -f $sample.bai ]; then
@@ -28,24 +25,14 @@
     wait
 
     ls *.bai
-    #wait 600
-    # check if bam been indexed
-    #while :; do
-    #    if [ -f $sample.bam.bai ] || [ -f $sample.bai ]; then
-    #        d_jobs=$(docker container ls -a |grep "${sample}_samtools" |wc -l)
-    #        echo $d_jobs
-    #        if [ $d_jobs -ge 1 ]; then docker rm ${sample}_samtools -f; fi
-    #        break;
-    #    else sleep 10 #; echo Check
-    #    fi
-    #done
+    
     ############
 
     if [ 1 == 1 ]; then
 
         ##polysolver###
         echo "run polysolver"
-        #docker pull sachet/polysolver:v4
+        #base on sachet/polysolver:v4
         container_NAME="${sample}_polysolver"
         d_jobs=$(docker container ls -a |grep "${sample}_polysolver" |wc -l)
         if [ $d_jobs -ge 1 ]; then docker rm ${sample}_polysolver -f; fi
@@ -59,12 +46,11 @@
         #-format: fastq format (STDFQ, ILMFQ, ILM1.8 or SLXFQ; see Novoalign documentation)
         #-insertCalc: flag indicating whether empirical insert size distribution should be used in the model (0 or 1)
         #-outDir: output directory
-
-        #docker run -d -P --name $container_NAME -v $folder:/home/docker sachet/polysolver:v4 \
-        #    bash /home/polysolver/scripts/shell_call_hla_type /home/docker/$sample.bam Unknown 1 hg38 STDFQ 0 /home/docker/HLA/polysolver/$sample
+        
         docker run -d -P --name $container_NAME -v $folder:/home/docker xmzhuo/polysolver:v4m2 \
             bash /home/polysolver/scripts/shell_call_hla_type /home/docker/$sample.bam Unknown 1 hg38 STDFQ 0 /home/docker/HLA/polysolver/$sample
-
+        
+        #check the status of running
         while :; do
             if [ -f $folder/HLA/polysolver/$sample/winners.hla.txt ]; then break; else sleep 10; fi
         done
@@ -80,9 +66,9 @@
 
     if [ 1 == 1 ]; then
         echo "## run hla-hd, hla-scan and kourami, hla-vbseq, hlaminer"
-        #launch docker of xmzhuo/hla:0.0.7 for kourami, hlascan and hlahd
+        #launch docker of xmzhuo/hla:0.0.9 for kourami, hlascan, hlahd, hlavbseq and hlaminer
         #docker load -i ~/xmzhuo_hla_0.0.7.tar
-        #docker run --name ${sample}_hla -v /mydata:/mydata -it xmzhuo/hla:0.0.7 bash hla_poll_v1.2_sub.sh
+        
         #close any running container with the same name
         d_jobs=$(docker container ls -a |grep "${sample}_hla" |wc -l)
         if [ $d_jobs -ge 1 ]; then docker rm ${sample}_hla -f; fi
@@ -198,5 +184,4 @@
 
 #  done
 
-    #dx upload *.HLA -r
 ##############################################
