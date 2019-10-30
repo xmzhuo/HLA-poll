@@ -1,3 +1,5 @@
+# Xinming Zhuo PhD; xmzhuo@gmail.com
+#This is the script used in master script; it also can stand alone for calling previous result. Also can modified for selection of callers for polling.
 #call hla with optimized setting
 #input 1. call summary report 2. resolution (2,default 4,6,8)
 #bash hla_poll_call.sh sample.summary.csv resolution
