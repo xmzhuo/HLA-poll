@@ -1,6 +1,8 @@
 # HLA-poll
+Xinming Zhuo, PhD. zhuox@upmc.edu; xmzhuo@gmail.com
 script and supplement data for HLA-poll
 
+support the manuscript:
 HLA-poll: an ensemble suite of human leukocyte antigen-prediction tools for whole-exome and whole-genome sequencing data 
 
 hla_poll_v1.8.main.run.sh
