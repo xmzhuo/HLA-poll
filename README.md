@@ -13,7 +13,9 @@ docker images:
 xmzhuo/hla:0.0.9
 xmzhuo/polysolver:v4m2
 
-1. put all three shell scripts in one folder
-2. install docker
-3. run hla_poll_v1.8.main.run.sh
+requirement: linux OS (MacOS may need little modification), docker
+file: bam (mapped with hg38)
+
+How to run:
+bash hla_poll_v1.8.main.run.sh /data/in/ /data/out/ hla_poll_v1.8.sub.sh target.bam
 
