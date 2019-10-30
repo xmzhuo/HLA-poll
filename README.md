@@ -13,7 +13,7 @@ docker images:
 xmzhuo/hla:0.0.9
 xmzhuo/polysolver:v4m2
 
-requirement: linux OS (MacOS may need little modification), docker
+requirement: linux OS (MacOS may need a few modification), docker
 file: bam (mapped with hg38)
 
 How to run:
