@@ -4,7 +4,7 @@
 #Xinming Zhuo PhD; xmzhuo@gmail.com
 ###############################
 #this is the master script
-#bash hla_poll_v1.8.main.run.sh /data/in/ /data/out/ *.sub.sh
+#bash hla_poll_v1.8.main.run.sh /data/in/ /data/out/ *.sub.sh target.bam
 ######## body of code ########
 
   folder="$1"
