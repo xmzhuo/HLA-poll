@@ -19,3 +19,7 @@ file: bam (mapped with hg38)
 How to run:
 bash hla_poll_v1.8.main.run.sh /data/in/ /data/out/ hla_poll_v1.8.sub.sh target.bam
 
+
+For using each indevidual caller, please refer to each caller's licenscing policy.
+
+
