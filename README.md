@@ -11,10 +11,10 @@ Dependency: nextflow version >21.04; Docker (local); SIngularity (HPC)
 
 User can simply run 
 for local:
-nextflow run ~/nf/hla-poll-nf -profile standard --index_input_bam "path/to/*.bam" 
+nextflow run hla-poll-nf -profile standard --index_input_bam "/path/to/*.bam" 
 
 for HPC:
-nextflow run ~/nf/hla-poll-nf -profile slurm --index_input_bam "results/bqsr/*.bam"
+nextflow run hla-poll-nf -profile slurm --index_input_bam "path/to/*.bam"
 
 
 
