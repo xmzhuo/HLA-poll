@@ -5,6 +5,20 @@ script and supplement data for HLA-poll
 support the manuscript:
 HLA-poll: an ensemble suite of human leukocyte antigen-prediction tools for whole-exome and whole-genome sequencing data 
 
+
+# A nextflow solution is provided in hla-poll-nf
+Dependency: nextflow version >21.04; Docker (local); SIngularity (HPC)
+
+User can simply run 
+for local:
+nextflow run ~/nf/hla-poll-nf -profile standard --index_input_bam "path/to/*.bam" 
+
+for HPC:
+nextflow run ~/nf/hla-poll-nf -profile slurm --index_input_bam "results/bqsr/*.bam"
+
+
+
+### MISC:
 hla_poll_v1.8.main.run.sh
 hla_poll_v1.8.sub.sh
 hla_poll_call_v1.sh
