@@ -9,12 +9,12 @@ HLA-poll: an ensemble suite of human leukocyte antigen-prediction tools for whol
 # A nextflow solution is provided in hla-poll-nf
 Dependency: nextflow version >21.04; Docker (local); SIngularity (HPC)
 
-User can simply run <br: />
+User can simply run <br />
 for local:
-nextflow run hla-poll-nf -profile standard --index_input_bam "/path/to/*.bam" <br: />
+nextflow run hla-poll-nf -profile standard --index_input_bam "/path/to/*.bam" <br />
 
 for HPC:
-nextflow run hla-poll-nf -profile slurm --index_input_bam "path/to/*.bam"
+nextflow run hla-poll-nf -profile slurm --index_input_bam "path/to/*.bam"  <br />
 
 
 
