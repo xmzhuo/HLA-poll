@@ -12,7 +12,7 @@ Recommend to run the pipeline with given nextflow solution. <br />
 # A nextflow solution is provided in hla-poll-nf
 Dependency: nextflow version >21.04; Docker (local); SIngularity (HPC)
 
-User can simply run <br />
+After download the hla-poll-nf folder, User can simply run <br />
 for local:
 nextflow run hla-poll-nf -profile standard --hla_input_bam "/path/to/*.bam" --hla_script "path/to/hla-poll-nf/bin/alignAndExtract_hs1938.sh" <br />
 
