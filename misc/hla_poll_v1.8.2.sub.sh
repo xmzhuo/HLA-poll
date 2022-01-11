@@ -1,5 +1,7 @@
+#!usr/bin/env bash
 
 ##hla_poll_v1.8.cloud_sub.sh
+#1.8.2 adapted for nextflow and allow hg19
 # Xinming Zhuo PhD; xmzhuo@gmail.com
 #this the sub script used by the master script in a docker
 #background running HLA-scan, hlavbseq, hlaminer and HLA-HD to save computation time
@@ -10,16 +12,23 @@
     #source ~/.bashrc
     #avoid smatools point to alternative location
      mv /usr/bin/samtools /usr/bin/samtools1
+     cp alignAndExtract_hs1938.sh /kourami/scripts/
     #folder="/mydata"
     folder=$2
     cd $folder 
     #sample=$(ls *.bam)
 
- #for sample in $(ls *.bam); do
+    #for sample in $(ls *.bam); do
     
     sample=$1
     sample=$(echo $sample | sed 's/\.bam//')
     echo $sample
+    
+
+    # check if bam file is hg19
+    hg19_chk=$(samtools view -H $sample.bam | grep ^@SQ | grep -E "hs37|hg19" | wc -l)
+    if [ $hg19_chk -gt 0 ]; then echo "$sample is mapped to hg19"; else echo "$sample is mapped to hg38"; fi 
+
     #sample_name=$(echo $sample | sed "s/\..*$//")
     if [ ! -f $sample.bam.bai ] && [ ! -f $sample.bai ]; then
         echo "indexing $sample.bam"
@@ -27,6 +36,7 @@
     fi
     
     mkdir $folder/HLA
+    
     
     #######################
     # HLA-scan 2.1.4
@@ -45,8 +55,14 @@
             for hla_gene in $hla_list
                 do
                 echo $hla_gene
-                #$hlascan -b $folder/$sample.bam -d /downloads/db/HLA-ALL.IMGT -g $hla_gene -t 24 -v 38 >> $folder/HLA/hla_scan/$sample.result
-                $hlascan -b $folder/$sample.bam -d /downloads/db/HLA-ALL.IMGT -g $hla_gene -t 24 -v 38 > temp
+                if [ $hg19_chk -gt 0 ]; then 
+                    #$hlascan -b $folder/$sample.bam -d /downloads/db/HLA-ALL.IMGT -g $hla_gene -t 24 -v 38 >> $folder/HLA/hla_scan/$sample.result
+                    $hlascan -b $folder/$sample.bam -d /downloads/db/HLA-ALL.IMGT -g $hla_gene -t 24 -v 19 > temp
+                else
+                    #$hlascan -b $folder/$sample.bam -d /downloads/db/HLA-ALL.IMGT -g $hla_gene -t 24 -v 38 >> $folder/HLA/hla_scan/$sample.result
+                    $hlascan -b $folder/$sample.bam -d /downloads/db/HLA-ALL.IMGT -g $hla_gene -t 24 -v 38 > temp
+                fi
+
                 
                 count=$(cat temp | grep "$hla_gene" -A6 | grep "# of considered types" | sed 's/^#.*: //')
                 echo $count
@@ -70,8 +86,9 @@
 
         mkdir $folder/HLA/kourami
         cd $folder/HLA/kourami
-
-        /kourami/scripts/alignAndExtract_hs38DH.sh $sample $folder/$sample.bam
+    
+        #/kourami/scripts/alignAndExtract_hs38DH.sh $sample $folder/$sample.bam
+        /kourami/scripts/alignAndExtract_hs1938.sh $sample $folder/$sample.bam
 
         java -jar /kourami/target/Kourami.jar -d /kourami/db -o $sample ${sample}_on_KouramiPanel.bam
 
@@ -225,8 +242,12 @@
         | awk -v FS=' Prediction ' '{if ($3 == "") $3=$2; print "HLA-"$2"\nHLA-"$3}' \
         |sed 's/ ,/,/g' | sed 's/ .*$//' > $folder/HLA/$sample.hlaminer_hptasr.f.result
 
-    wait 
+    wait
     ls $folder/HLA/*.f.result
+
+    mv $folder/HLA/*.f.result $folder
+    
+    mv $folder/HLA/kourami/${sample}_on_KouramiPanel.bam $folder/${sample}_hla.bam
 
     ############
 

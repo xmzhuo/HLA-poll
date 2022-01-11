@@ -1,4 +1,4 @@
-process HLADOC {
+process POLYSOLVERDOC {
     tag "# ${outputDir}swiss army knife (sak) nf with docker: ${dockerimg}"
     cpus "$cpu"
     memory "$mem"
@@ -11,8 +11,7 @@ process HLADOC {
 
     input:
     path file
-    path index_bam
-path index_bai
+    path hla_bam
     path script
     val advarg
     val dockerimg
@@ -28,12 +27,12 @@ path index_bai
     shell:   
     """
     echo "input files check: !{file}"
-    echo "upstream files check: !{index_bam}, !{index_bai}"
+    echo "upstream files check: !{hla_bam}"
     echo "script check: !{script}"
     #echo "cmd:!{advarg}"
     #echo "!{advarg}" > advarg_temp.sh
     #bash advarg_temp.sh 2>&1 | tee -a sak-nf_\$(date '+%Y%m%d_%H%M').log
-bash hla_poll_v1.8.sub.sh !{index_bam} \$(pwd) 2>&1 | tee -a sak-nf_\$(date +%Y%m%d_%H%M%S).log 
+bash hla_poll_polysolver.sh !{hla_bam} 2>&1 | tee -a sak-nf_\$(date +%Y%m%d_%H%M%S).log 
 outfileval="*.f.result "
 logname=\$(ls *.log | grep sak-nf)
  echo "# md5sum #" >> \${logname}

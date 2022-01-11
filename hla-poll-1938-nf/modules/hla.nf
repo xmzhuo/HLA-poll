@@ -1,4 +1,4 @@
-process INDEX {
+process HLA {
     tag "# ${outputDir} swiss army knife (sak) nf without docker"
     cpus "$cpu"
     memory "$mem"
@@ -21,8 +21,8 @@ process INDEX {
     val outputDir
      
     output:
-    path "*.bam", emit: bam
-    path "*.bai", emit: bai
+    path "*.f.result", emit: result
+    path "*_hla.bam", emit: bam
     path "*.log", emit: log
     
     shell:   
@@ -33,10 +33,8 @@ process INDEX {
     #echo "cmd:!{advarg}"
     #echo "!{advarg}" > advarg_temp.sh
     #bash advarg_temp.sh 2>&1 | tee -a sak-nf_\$(date '+%Y%m%d_%H%M').log
-sample=\$(echo !{bam} | sed 's/.bam/.hla.bam/')
- cp !{bam} \${sample}
- /samtools/bin/samtools index \${sample} 2>&1 | tee -a sak-nf_\$(date +%Y%m%d_%H%M%S).log 
-outfileval="*.bam *.bai "
+bash hla_poll_v1.8.3.sub.sh !{bam} \$(pwd) !{mem} 2>&1 | tee -a sak-nf_\$(date +%Y%m%d_%H%M%S).log 
+outfileval="*.f.result *_hla.bam "
 logname=\$(ls *.log | grep sak-nf)
  echo "# md5sum #" >> \${logname}
 md5sum \${outfileval} >> \${logname}
