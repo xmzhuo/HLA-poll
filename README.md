@@ -5,16 +5,19 @@ script and supplement data for HLA-poll
 support the manuscript:
 HLA-poll: an ensemble suite of human leukocyte antigen-prediction tools for whole-exome and whole-genome sequencing data 
 
+# v2
+Allow HLA calling with both hg19 and hg38
+Recommend to run the pipeline with given nextflow solution.
 
 # A nextflow solution is provided in hla-poll-nf
 Dependency: nextflow version >21.04; Docker (local); SIngularity (HPC)
 
 User can simply run <br />
 for local:
-nextflow run hla-poll-nf -profile standard --index_input_bam "/path/to/*.bam" <br />
+nextflow run hla-poll-nf -profile standard --hla_input_bam "/path/to/*.bam" --hla_script "path/to/hla-poll-nf/bin/alignAndExtract_hs1938.sh" <br />
 
-for HPC:
-nextflow run hla-poll-nf -profile slurm --index_input_bam "path/to/*.bam"  <br />
+for HPC: (some slurm with singularity may have permission issue with docker image)
+nextflow run hla-poll-nf -profile slurm --hla_input_bam "path/to/*.bam"  <br />
 
 
 
