@@ -6,8 +6,8 @@ support the manuscript:
 HLA-poll: an ensemble suite of human leukocyte antigen-prediction tools for whole-exome and whole-genome sequencing data 
 
 # v2
-Allow HLA calling with both hg19 and hg38
-Recommend to run the pipeline with given nextflow solution.
+Allow HLA calling with both hg19 and hg38. <br />
+Recommend to run the pipeline with given nextflow solution. <br />
 
 # A nextflow solution is provided in hla-poll-nf
 Dependency: nextflow version >21.04; Docker (local); SIngularity (HPC)
