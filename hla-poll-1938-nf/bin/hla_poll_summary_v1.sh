@@ -8,10 +8,10 @@ cat all.temp | awk -v FS=':' '{print $1}' >all_1.temp
 cat all.temp | awk -v FS=':' '{print $1":"$2}' | sed 's/:$//' >all_2.temp
 cat all.temp | awk -v FS=':' '{print $1":"$2":"$3}' | sed 's/:$//' >all_3.temp
 
-sample=$(head -n1 all_2.temp | sed 's/\..*//')
+sample=$(ls *.f.result | head -n1 | sed 's/\..*//')
 
 echo "HLA_Poll V1.6 by Xinming Zhuo <xmzhuo@gmail.com>" > $sample.summary.csv
-echo $sample,$(echo $(ls $sample*.f.result | sed "s/^.*$sample\.//"|sed 's/\..*$//') | sed 's/ /,/g'),Num_Caller,F_1,F_2,F_3,F_4 > $sample.summary.csv
+echo $sample,$(echo $(ls $sample*.f.result | sed "s/^.*$sample\.//"|sed 's/\.f.result$//') | sed 's/ /,/g'),Num_Caller,F_1,F_2,F_3,F_4 > $sample.summary.csv
 hla_list="HLA-A HLA-B HLA-C HLA-E HLA-F HLA-G MICA MICB HLA-DMA HLA-DMB HLA-DOA HLA-DOB HLA-DPA1 HLA-DPB1 HLA-DQA1 HLA-DQB1 HLA-DRA HLA-DRB1 HLA-DRB5 TAP1 TAP2"
 for p in $hla_list; do
     echo $p

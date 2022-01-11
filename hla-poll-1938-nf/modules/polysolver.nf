@@ -12,6 +12,7 @@ process POLYSOLVER {
     input:
     path file
     path hla_bam
+path hla_bai
     path script
     val advarg
     
@@ -27,7 +28,7 @@ process POLYSOLVER {
     shell:   
     """
     echo "input files check: !{file}"
-    echo "upstream files check: !{hla_bam}"
+    echo "upstream files check: !{hla_bam}, !{hla_bai}"
     echo "script check: !{script}"
     #echo "cmd:!{advarg}"
     #echo "!{advarg}" > advarg_temp.sh

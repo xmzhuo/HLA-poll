@@ -248,8 +248,8 @@
 
     mv $folder/HLA/*.f.result $folder
     
-    mv $folder/HLA/kourami/${sample}_on_KouramiPanel.bam $folder/${sample}_hla.bam
-
+    samtools sort $folder/HLA/kourami/${sample}_on_KouramiPanel.bam > $folder/${sample}_hla.bam
+    samtools index $folder/${sample}_hla.bam
     ############
 
     

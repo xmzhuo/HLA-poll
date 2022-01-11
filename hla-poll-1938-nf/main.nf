@@ -62,7 +62,7 @@ params.hla_dockerimg = "xmzhuo/hla:0.0.9"
 params.hla_argument = "bash hla_poll_v1.8.3.sub.sh !{bam} \$(pwd) !{mem}"
 params.hla_outputDir = "./results/hla-poll"
 params.hla_sakcpu = "4"
-params.hla_sakmem = "16.GB"
+params.hla_sakmem = "12.GB"
 params.hla_saktime = "2.hour"
 params.hla_input_bam = "/path/to/*.bam"
 params.polysolver_name = "polysolver"
@@ -77,7 +77,7 @@ params.polysolver_saktime = "2.hour"
 params.polysolver_input_file = ""
 params.poll_name = "poll"
 params.poll_description = "hla-poll calling"
-params.poll_script = ""
+params.poll_script = "/path/to/hla_poll_call_v1.1"
 params.poll_dockerimg = ""
 params.poll_argument = "bash hla_poll_summary_v1.sh 4"
 params.poll_outputDir = "./results/hla-poll"
@@ -113,6 +113,7 @@ log.info """\
   'output': {
     'result': '*.f.result',
     'bam': '*_hla.bam',
+    'bai': '*_hla.*bai',
     'log': '*.log'
   },
   'upstream': [
@@ -123,7 +124,7 @@ log.info """\
   'argument': 'bash hla_poll_v1.8.3.sub.sh !{bam} \$(pwd) !{mem}',
   'outputDir': './results/hla-poll',
   'sakcpu': '4',
-  'sakmem': '8.GB',
+  'sakmem': '12.GB',
   'saktime': '2.hour'
 }
 {
@@ -137,7 +138,8 @@ log.info """\
     'log': '*.log'
   },
   'upstream': [
-    'hla.bam'
+    'hla.bam',
+    'hla.bai'
   ],
   'script': '',
   'dockerimg': 'xmzhuo/polysolver:v4m2',
@@ -161,7 +163,7 @@ log.info """\
     'hla.result',
     'polysolver.result'
   ],
-  'script': '',
+  'script': '/path/to/hla_poll_call_v1.1',
   'dockerimg': '',
   'argument': 'bash hla_poll_summary_v1.sh 4',
   'outputDir': './results/hla-poll',
@@ -210,9 +212,9 @@ workflow {
     if(params.polysolver_script) {POLYSOLVER_ScriptFiles = Channel.fromPath(params.polysolver_script).toSortedList()} else {POLYSOLVER_ScriptFiles = Channel.fromPath("$baseDir" + "/bin/script_sanitychk")}
     
     if (params.polysolver_dockerimg) {
-        POLYSOLVERDOC(POLYSOLVER_file, HLADOC.out.bam.collect(), POLYSOLVER_ScriptFiles, params.polysolver_argument, params.polysolver_dockerimg, params.polysolver_sakcpu, params.polysolver_sakmem, params.polysolver_saktime, params.polysolver_outputDir)
+        POLYSOLVERDOC(POLYSOLVER_file, HLADOC.out.bam.collect(), HLADOC.out.bai.collect(), POLYSOLVER_ScriptFiles, params.polysolver_argument, params.polysolver_dockerimg, params.polysolver_sakcpu, params.polysolver_sakmem, params.polysolver_saktime, params.polysolver_outputDir)
     } else {
-        POLYSOLVER(POLYSOLVER_file, HLADOC.out.bam.collect(), POLYSOLVER_ScriptFiles, params.polysolver_argument, params.polysolver_sakcpu, params.polysolver_sakmem, params.polysolver_saktime, params.polysolver_outputDir)   
+        POLYSOLVER(POLYSOLVER_file, HLADOC.out.bam.collect(), HLADOC.out.bai.collect(), POLYSOLVER_ScriptFiles, params.polysolver_argument, params.polysolver_sakcpu, params.polysolver_sakmem, params.polysolver_saktime, params.polysolver_outputDir)   
     }
     //* ## step cmd example SAK
     if(params.poll_input_file) {POLL_file = Channel.fromPath(params.poll_input_file).toSortedList()} else {POLL_file = Channel.fromPath("$baseDir" + "/data/input_sanitychk")}
